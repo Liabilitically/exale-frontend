@@ -6,9 +6,11 @@ export default function OauthCallback() {
     const router = useRouter();
     const params = useSearchParams();
 
+    const backend_url = process.env.NEXT_PUBLIC_API_URL;
+
     const checkUser = async () => {
         try {
-            const res = await fetch("http://localhost:8000/check-user", {
+            const res = await fetch(`${backend_url}/check-user`, {
                 method: "GET",
                 credentials: "include",
             });
@@ -33,7 +35,7 @@ export default function OauthCallback() {
     useEffect(() => {
         const code = params.get('code');
         if (code) {
-            fetch("http://localhost:8000/authenticate", {
+            fetch(`${backend_url}/authenticate`, {
                 method: "POST",
                 body: JSON.stringify({ code }),
                 headers: { "Content-Type": "application/json" },

@@ -11,14 +11,17 @@ interface Email {
 }
 
 const Inbox = () => {
-  const [emails, setEmails] = useState<Object>({});
+  const [emails, setEmails] = useState<Record<string, Email>>({});
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState<boolean>(true); // 🆕
   const [error, setError] = useState<boolean>(false);
   const [newEmailsAvailable, setNewEmailsAvailable] = useState<boolean>(true);
 
+  const backend_url = process.env.NEXT_PUBLIC_API_URL;
+
   useEffect(() => {
     fetchEmails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const apiCallWithRetry = async (
@@ -29,7 +32,7 @@ const Inbox = () => {
     const res = await fetch(url, { ...options, credentials: 'include' });
 
     if (res.status === 401 && retry) {
-      const refreshed = await fetch('http://localhost:8000/refresh-token', {
+      const refreshed = await fetch(`${backend_url}/refresh-token`, {
         method: 'POST',
         credentials: 'include',
       });
@@ -47,7 +50,7 @@ const Inbox = () => {
   const fetchEmails = async () => {
     try {
       setIsFetching(true); // 🆕 start spinner
-      const res = await apiCallWithRetry('http://localhost:8000/read-emails', {
+      const res = await apiCallWithRetry(`${backend_url}/read-emails`, {
         method: 'POST',
       });
 
@@ -71,7 +74,7 @@ const Inbox = () => {
       setLoadingId(email_id);
 
       const res = await apiCallWithRetry(
-        'http://localhost:8000/draft',
+        `${backend_url}/draft`,
         {
           method: 'POST',
           headers: {

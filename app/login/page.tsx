@@ -3,7 +3,6 @@
 export default function LoginPage() {
   const loginWithGoogle = () => {
     const redirectUri = 'http://localhost:3000/oauth/callback';
-    // const clientId = '427488466743-i14lvn79r5tgggikmj0glath98ivsilr.apps.googleusercontent.com'; //TODO: hide this clientID before production
     const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
     const scope = 'https://www.googleapis.com/auth/gmail.modify';
 
