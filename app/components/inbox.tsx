@@ -17,7 +17,7 @@ const Inbox = () => {
   const [error, setError] = useState<boolean>(false);
   const [newEmailsAvailable, setNewEmailsAvailable] = useState<boolean>(true);
 
-  const backend_url = process.env.NEXT_PUBLIC_API_URL;
+  const backend_url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
   useEffect(() => {
     fetchEmails();
