@@ -17,11 +17,13 @@ export default function CallbackInner() {
 
   const checkUser = useCallback(async (code: string) => {
     const user_authenticated_res = await fetch(`${backend_url}/authenticate?code=${code}`, {
+      method: 'POST',
       credentials: 'include',
     });
 
     if (user_authenticated_res.ok) {
       const user_authorized_res = await fetch(`${backend_url}/check-user`, {
+        method: 'GET',
         credentials: 'include',
       });
 
