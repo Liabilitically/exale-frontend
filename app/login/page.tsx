@@ -2,7 +2,7 @@
 
 export default function LoginPage() {
   const loginWithGoogle = () => {
-    const redirectUri = 'http://localhost:3000/oauth/callback';
+    const redirectUri = 'https://exale-frontend.vercel.app/oauth/callback';
     const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
     const scope = 'https://www.googleapis.com/auth/gmail.modify';
 
