@@ -33,6 +33,7 @@ export default function CallbackInner() {
   useEffect(() => {
     const code = searchParams.get('code');
     if (code) {
+      console.log("Code Obtained:", code);
       checkUser(code);
     }
   }, [searchParams, checkUser]);
