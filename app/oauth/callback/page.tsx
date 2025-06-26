@@ -1,7 +1,5 @@
-import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
-
-const CallbackInner = dynamic(() => import('./CallbackInner'), { ssr: false });
+import CallbackInner from './CallbackInner';
 
 export default function CallbackPage() {
   return (

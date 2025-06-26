@@ -2,9 +2,8 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useCallback } from 'react';
 
-const backend_url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-
 export default function CallbackInner() {
+  const backend_url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
   const searchParams = useSearchParams();
   const router = useRouter();
 
