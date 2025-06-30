@@ -8,6 +8,7 @@ export default function CallbackInner() {
   const router = useRouter();
 
   const checkUser = useCallback(async (code: string) => {
+    console.log("code param Inside checkUser:", code);
     const res = await fetch(`${backend_url}/authenticate`, {
       method: 'POST',
       credentials: 'include',
@@ -16,6 +17,8 @@ export default function CallbackInner() {
       },
       body: JSON.stringify({ code }),
     });
+    
+    console.log("Authenticate res:", res);
 
     if (res.ok) {
       const authRes = await fetch(`${backend_url}/check-user`, {
