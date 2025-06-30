@@ -1,15 +1,29 @@
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Inbox from './components/inbox';
 import Navbar from './components/navbar';
 
-export default async function Home() {
-  const accessToken = (await cookies()).get('access_token')?.value;
-  const refreshToken = (await cookies()).get('refresh_token')?.value;
+const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://exale-backend.onrender.com';
 
-  if (!accessToken || !refreshToken) {
-    redirect('/login');
-  }
+export default function Home() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${backendUrl}/check-user`, {
+      method: 'GET',
+      credentials: 'include', // Ensure cookies are sent
+    })
+      .then(res => {
+        if (!res.ok) router.push('/login');
+        else setLoading(false);
+      })
+      .catch(() => router.push('/login'));
+  }, [router]);
+
+  if (loading) return <div className="p-10 text-center text-accent">Loading...</div>;
 
   return (
     <main className="px-4 py-6 min-h-screen">

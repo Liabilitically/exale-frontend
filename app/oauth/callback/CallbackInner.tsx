@@ -1,50 +1,53 @@
 'use client';
+
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useCallback } from 'react';
 
+const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://exale-backend.onrender.com';
+
 export default function CallbackInner() {
-  const backend_url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const checkUser = useCallback(async (code: string) => {
-    console.log("code param Inside checkUser:", code);
-    const res = await fetch(`${backend_url}/authenticate`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ code }),
-    });
-
-    console.log("Authenticate res:", res);
-
-    if (res.ok) {
-      const authRes = await fetch(`${backend_url}/check-user`, {
-        method: 'GET',
+  const checkAndRedirect = useCallback(async (code: string) => {
+    try {
+      const authRes = await fetch(`${backendUrl}/authenticate`, {
+        method: 'POST',
         credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ code })
       });
 
-      if (!authRes.ok) return router.push('/unauthorized');
+      if (!authRes.ok) {
+        router.push('/unauthorized');
+        return;
+      }
 
-      // Wait until cookies are reliably set
-      setTimeout(() => {
-        router.push('/');
-      }, 100); // gives browser time to store cookies
+      const userCheck = await fetch(`${backendUrl}/check-user`, {
+        method: 'GET',
+        credentials: 'include'
+      });
 
-    } else {
-      alert('Authentication failed.');
+      router.push(userCheck.ok ? '/' : '/unauthorized');
+
+    } catch (error) {
+      console.error('Error during authentication:', error);
+      router.push('/unauthorized');
     }
   }, [router]);
 
   useEffect(() => {
     const code = searchParams.get('code');
     if (code) {
-      console.log("Code Obtained:", code);
-      checkUser(code);
+      checkAndRedirect(code);
     }
-  }, [searchParams, checkUser]);
+  }, [searchParams, checkAndRedirect]);
 
-  return <div className="text-center text-accent p-10">Checking user...</div>;
+  return (
+    <div className="text-center text-accent p-10">
+      Checking user...
+    </div>
+  );
 }
