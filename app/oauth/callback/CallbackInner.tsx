@@ -17,7 +17,7 @@ export default function CallbackInner() {
       },
       body: JSON.stringify({ code }),
     });
-    
+
     console.log("Authenticate res:", res);
 
     if (res.ok) {
@@ -26,7 +26,13 @@ export default function CallbackInner() {
         credentials: 'include',
       });
 
-      router.push(authRes.ok ? '/' : '/unauthorized');
+      if (!authRes.ok) return router.push('/unauthorized');
+
+      // Wait until cookies are reliably set
+      setTimeout(() => {
+        router.push('/');
+      }, 100); // gives browser time to store cookies
+
     } else {
       alert('Authentication failed.');
     }
