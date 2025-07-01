@@ -29,17 +29,22 @@ export default function CallbackInner() {
         credentials: 'include',
       });
 
-      if (!checkRes.ok) return router.push('/unauthorized');
+      if (checkRes.status == 403) return router.push('/unauthorized');
+      if (!checkRes.ok) return router.push('/login');
 
       // Step 3: Set logged_in cookie on frontend
       document.cookie = 'logged_in=true; path=/; max-age=3600; secure; samesite=None';
 
       // Step 4: Redirect to homepage after a short delay
-      setTimeout(() => router.push('/'), 200);
+      setTimeout(() => router.push('/'), 100);
     };
 
     authenticate();
   }, [searchParams, router]);
 
-  return <div className="p-10 text-center text-accent">Finalizing login...</div>;
+  return (
+    <div className="flex items-start justify-center h-max">
+      <span className="loading loading-spinner loading-5xl text-accent" />
+    </div>
+  );
 }
