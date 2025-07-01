@@ -2,7 +2,7 @@
 
 export default function Navbar() {
   const logout = async () => {
-    await fetch('/api/logout', { method: 'POST' });
+    await fetch('/api/logout', { method: 'POST', credentials: 'include' });
     window.location.href = '/login';
   };
 
