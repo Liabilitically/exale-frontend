@@ -1,16 +1,15 @@
-// middleware.ts
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const accessToken = request.cookies.get('access_token');
+  const isLoggedIn = request.cookies.get('logged_in')?.value === 'true';
 
-  const publicPaths = ['/login', '/oauth/callback', '/api', '/unauthorized'];
+  const publicPaths = ['/login', '/oauth/callback', '/api'];
   const isPublic = publicPaths.some(path =>
     request.nextUrl.pathname.startsWith(path)
   );
 
-  if (!isPublic && !accessToken) {
+  if (!isPublic && !isLoggedIn) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
