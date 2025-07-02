@@ -27,9 +27,6 @@ export default function CallbackInner() {
           return router.push('/login');
         }
 
-        const allCookies = document.cookie;
-        console.warn('Client cookies after auth:', allCookies);
-
         // Step 2: Check if user is in Firestore
         const checkRes = await fetch(`${backend_url}/check-user`, {
           method: 'GET',
@@ -48,6 +45,10 @@ export default function CallbackInner() {
         await fetch('/api/set-cookie', {
           method: 'POST',
         });
+
+        const allCookies = document.cookie;
+        console.warn('Client cookies after auth:', allCookies);
+
         router.push('/');
 
       } catch (err) {
