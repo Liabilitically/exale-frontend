@@ -27,6 +27,9 @@ export default function CallbackInner() {
           return router.push('/login');
         }
 
+        const allCookies = document.cookie;
+        console.warn('Client cookies after auth:', allCookies);
+
         // Step 2: Check if user is in Firestore
         const checkRes = await fetch(`${backend_url}/check-user`, {
           method: 'GET',
@@ -42,11 +45,11 @@ export default function CallbackInner() {
           return router.push('/login');
         }
 
-        // Step 3: Set local cookie for frontend middleware
-        document.cookie = 'logged_in=true; path=/; max-age=3600; secure; samesite=None';
-
-        // Step 4: Redirect home
+        await fetch('/api/set-cookie', {
+          method: 'POST',
+        });
         router.push('/');
+
       } catch (err) {
         console.error('CallbackInner error:', err);
         router.push('/login');
