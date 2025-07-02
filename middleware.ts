@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
 
   console.log('COOKIE:', request.cookies.get('logged_in')?.value);
 
-  const publicPaths = ['/login', '/oauth/callback', '/api'];
+  const publicPaths = ['/login', '/oauth/callback', '/api', '/unauthorized'];
   const isPublic = publicPaths.some(path =>
     request.nextUrl.pathname.startsWith(path)
   );
