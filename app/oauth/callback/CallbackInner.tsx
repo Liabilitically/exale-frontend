@@ -37,9 +37,7 @@ export default function CallbackInner() {
         if (checkRes.status === 403) {
           console.warn('User not allowed (403)');
           return router.push('/unauthorized');
-        }
-
-        if (!checkRes.ok) {
+        } else if (!checkRes.ok) {
           console.error('Check-user failed:', checkRes.status);
           return router.push('/login');
         }
