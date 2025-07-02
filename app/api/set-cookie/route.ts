@@ -4,7 +4,7 @@ export async function POST() {
   const response = NextResponse.json({ ok: true });
   response.cookies.set('logged_in', 'true', {
     path: '/',
-    httpOnly: false,
+    httpOnly: true,
     secure: true,
     sameSite: 'lax',
     maxAge: 60 * 60,

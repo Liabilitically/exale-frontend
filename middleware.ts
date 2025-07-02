@@ -1,5 +1,4 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const isLoggedIn = request.cookies.get('logged_in')?.value === 'true';
@@ -12,6 +11,7 @@ export function middleware(request: NextRequest) {
   );
 
   if (!isPublic && !isLoggedIn) {
+    console.warn('Redirecting to /login due to missing or invalid cookie');
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
