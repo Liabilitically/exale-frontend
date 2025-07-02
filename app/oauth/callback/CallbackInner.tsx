@@ -29,21 +29,24 @@ export default function CallbackInner() {
         credentials: 'include',
       });
 
-      if (checkRes.status == 403) return router.push('/unauthorized');
-      if (!checkRes.ok) return router.push('/login');
+      if (checkRes.status == 403) {
+        router.push('/unauthorized');
+      } else if (!checkRes.ok) {
+        router.push('/login');
+      } else {
+        // Step 3: Set logged_in cookie on frontend
+        document.cookie = 'logged_in=true; path=/; max-age=3600; secure; samesite=None';
 
-      // Step 3: Set logged_in cookie on frontend
-      document.cookie = 'logged_in=true; path=/; max-age=3600; secure; samesite=None';
-
-      // Step 4: Redirect to homepage after a short delay
-      setTimeout(() => router.push('/'), 100);
+        // Step 4: Redirect to homepage after a short delay
+        setTimeout(() => router.push('/'), 50);
+      }
     };
 
     authenticate();
   }, [searchParams, router]);
 
   return (
-    <div className="flex items-start justify-center h-max">
+    <div className="flex items-start justify-center h-screen">
       <span className="loading loading-spinner loading-5xl text-accent" />
     </div>
   );
